@@ -1,0 +1,23 @@
+name: deploy-auth
+
+on:
+  push: 
+    branches:
+      - main
+    paths: 
+      - 'auth/**'
+jobs:
+  build:
+    environment: DOCKER_CONFIG
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v2
+      - run: cd auth && docker build -t lakeside763/auth .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run: docker push lakeside763/auth
+      
+    
+
